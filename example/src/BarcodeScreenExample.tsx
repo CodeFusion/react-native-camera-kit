@@ -41,7 +41,7 @@ export default class BarcodeScreenExample extends Component {
         laserColor="red"
         frameColor="white"
         onReadCode={(event) => {
-          this.setState({ example: CheckingScreen, value: event.nativeEvent.codeStringValue });
+          this.setState({ example: CheckingScreen, value: event.nativeEvent });
         }}
         hideControls
       />

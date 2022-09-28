@@ -385,9 +385,12 @@ class CKCamera(context: ThemedReactContext) : FrameLayout(context), LifecycleObs
         rectOverlay.drawRectBounds(focusRects)
     }
 
-    private fun onBarcodeRead(barcodes: List<String>) {
+    private fun onBarcodeRead(barcodes: List<BarcodeResult>) {
         val event: WritableMap = Arguments.createMap()
-        event.putString("codeStringValue", barcodes.first())
+        val barcode = barcodes.first()
+        event.putString("codeStringValue", barcode.codeStringValue)
+        event.putInt("codeFormat", barcode.codeFormat)
+        event.putInt("codeType", barcode.codeType)
         currentContext.getJSModule(RCTEventEmitter::class.java).receiveEvent(
                 id,
                 "onReadCode",

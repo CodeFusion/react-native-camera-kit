@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import BarcodeScreen from './BarcodeScreenExample';
+import {BarcodeFormat, BarcodeValueType} from "../../src/types";
 
 export default class CheckingScreen extends Component {
   constructor(props) {
@@ -16,11 +17,14 @@ export default class CheckingScreen extends Component {
       const value = this.state.value;
       return <CheckingScreen value={value} />;
     }
+    const value = this.props.value;
     return (
       <View style={styles.container}>
-        <Text style={styles.valueText}>{this.props.value}</Text>
+        <Text style={styles.valueText}>Value: {value.codeStringValue}</Text>
+        <Text style={styles.valueText}>Format: {BarcodeFormat[value.codeFormat]} ({value.codeFormat})</Text>
+        <Text style={styles.valueText}>Type: {BarcodeValueType[value.codeType]} ({value.codeType})</Text>
         <TouchableOpacity onPress={() => this.setState({ example: BarcodeScreen })}>
-          <Text style={styles.buttonText}>Back button</Text>
+          <Text style={styles.buttonText}>Go Back</Text>
         </TouchableOpacity>
       </View>
     );
@@ -36,7 +40,7 @@ const styles = StyleSheet.create({
   },
   valueText: {
     marginBottom: 20,
-    fontSize: 40,
+    fontSize: 25,
   },
   buttonText: {
     color: 'blue',

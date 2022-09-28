@@ -1,23 +1,51 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-
-android {
-    compileSdkVersion 31
-    defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-        ndk {
-            abiFilters "arm64-v8a", "x86"
+allprojects {
+    repositories {
+        maven {
+            // All of React Native (JS, Android binaries) is installed from npm
+            url "$rootDir/../node_modules/react-native/android"
         }
-    }
-    lintOptions {
-        warning 'InvalidPackage'
     }
 }
 
+buildscript {
+    ext {
+        kotlin_version = '1.7.10'
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+android {
+    buildToolsVersion safeExtGet('buildToolsVersion', "31.0.0")
+    compileSdk safeExtGet('compileSdkVersion', 31)
+
+    defaultConfig {
+        targetSdkVersion safeExtGet('targetSdkVersion', 31)
+        minSdkVersion safeExtGet('minSdkVersion', 21)
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
 dependencies {
+    //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'
     implementation group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.12.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -39,7 +67,4 @@ dependencies {
     // implementation "androidx.camera:camera-extensions:${camerax_version}"
 
     implementation 'com.google.mlkit:barcode-scanning:17.0.2'
-}
-repositories {
-    mavenCentral()
 }
